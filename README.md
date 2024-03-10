@@ -1,79 +1,90 @@
-### study-of-basic-gates
+# POLICY EVALUATION
 
-**AIM:** 
+## AIM
+To develop a Python program to evaluate the given policy by maximizing its cumulative reward while dealing with slippery terrain.
 
-To study and verify the truth table of logic gates in Quartus II using Verilog programming.
+## PROBLEM STATEMENT
+The Bandit Slippery Walk problem is a Reinforcement Learning (RL) problem in which the agent must learn to navigate a slippery environment to reach the goal state.
 
-**Equipments Required:**
+1. we are tasked with creating an RL agent to solve the "Bandit Slippery Walk" problem.
 
-Software – Quartus prime 
+2. The environment consists of Seven states representing discrete positions the agent can occupy.
 
-**Theory**
+3. The agent must learn to navigate this environment while dealing with the challenge of slippery terrain.
 
-Introduction Logic gates are the basic building blocks of any digital system. Logic gates are electronic circuits having one or more than one input and only one output. The relationship between the input and the output is based on a certain logic. Based on this, logic gates are named as
+4. Slippery terrain introduces stochasticity in the agent's actions, making it difficult to predict the outcomes of its actions accurately.
 
-AND gate OR gate NOT gate NAND gate NOR gate Ex-OR gate Ex-NOR gate
+## STATE
+The environment has 7 states:
 
-**AND gate**
+Two Terminal States: G: The goal state & H: A hole state.Five Transition states / Non-terminal States including S: The starting state.
 
-The AND gate is an electronic circuit that gives a high output (1) only if all its inputs are high. A dot (.) is used to show the AND operation i.e. A.B or can be written as AB
-Y= A.B
+## Actions
+The agent can take two actions: R (move right) and L (move left). 
 
-**OR gate** 
+The transition probabilities for each action are as follows:
 
-The OR gate is an electronic circuit that gives a high output (1) if one or more of its inputs are high. A plus (+) is used to show the OR operation.
-Y= A+B
+50% chance that the agent moves in the intended direction.
+33.33% chance that the agent stays in its current state.
+16.66% chance that the agent moves in the opposite direction.
 
-**NOT gate**
+## REWARD
+The agent receives a reward of +1 for reaching the goal state and a reward of 0 for all other states.
 
-The NOT gate is an electronic circuit that produces an inverted version of the input at its output. It is also known as an inverter. If the input variable is A, the inverted output is known as NOT A. This is also shown as A' or A with a bar over the top, as shown at the outputs.
-Y= A'
+## GRAPHICAL REPRESENTATION
+![Graph](https://github.com/Pravinrajj/rl-policy-evaluation/assets/117917674/81942bf3-5a4d-455c-be48-b7aa74de98b3)
 
-**NAND gate**
+## FORMULA
+![form](https://github.com/Pravinrajj/rl-policy-evaluation/assets/117917674/5e063a00-1ed5-4f4a-ab35-d9e9a13e1cc8)
 
-This is a NOT-AND gate which is equal to an AND gate followed by a NOT gate. The outputs of all NAND gates are high if any of the inputs are low. The symbol is an AND gate with a small circle on the output. The small circle represents inversion.
-Y= (AB)’
+## POLICY EVALUATION FUNCTION
+~~~python
 
-**NOR gate**
+def policy_evaluation(pi, P, gamma=1.0, theta=1e-10):
+    prev_V = np.zeros(len(P), dtype=np.float64)
+# code  to evaluate the given policy
+    while True:
+      V=np.zeros(len(P),dtype=np.float64)
+      for s in range(len(P)):
+        for prob, next_state, reward, done in P[s][pi(s)]:
+          V[s]+=prob*(reward+gamma+prev_V[next_state]*(not done))
+      if np.max(np.abs(prev_V-V))<theta:
+        break
+      prev_V=V.copy()
+      return V
 
-This is a NOT-OR gate which is equal to an OR gate followed by a NOT gate. The outputs of all NOR gates are low if any of the inputs are high. The symbol is an OR gate with a small circle on the output. The small circle represents inversion.
-Y= (A+B)’
+# Code to evaluate the first policy
+V1 = policy_evaluation(pi_1, P,gamma=0.99)
+print_state_value_function(V1, P, n_cols=7, prec=5)
 
-**Ex-OR gate**
+# Code to evaluate the second policy
+V2 = policy_evaluation(pi_2, P)
+print_state_value_function(V2, P, n_cols=7, prec=5)
 
-The 'Exclusive-OR' gate is a circuit which will give a high output if either, but not both of its two inputs are high. An encircled plus sign (⊕) is used to show the Ex-OR operation.
-Y= A⊕B
+# Comparing the two policies
+if(np.sum(V1>=V2)==7):
+  print("The first policy is the better policy")
+elif(np.sum(V2>=V1)==7):
+  print("The second policy is the better policy")
+else:
+  print("Both policies have their merits.")
+~~~
+## OUTPUT:
+### POLICY 1
+![P1](https://github.com/Pravinrajj/rl-policy-evaluation/assets/117917674/32634a57-1a5b-44bd-bb66-b12b8bce611e)
+![P2](https://github.com/Pravinrajj/rl-policy-evaluation/assets/117917674/96c8e7be-40ab-4611-a9b8-3ac716ec3914)
+![P3](https://github.com/Pravinrajj/rl-policy-evaluation/assets/117917674/3089dee7-6bba-48a4-a733-3b3180aefc2d)
 
-**Ex-NOR gate**
+### POLICY 2
+![PP1](https://github.com/Pravinrajj/rl-policy-evaluation/assets/117917674/f2bb7a4c-0728-4b73-b7ef-236aaaf0b84f)
+![PP2](https://github.com/Pravinrajj/rl-policy-evaluation/assets/117917674/61d21b8d-2da5-482e-b46a-3603bc87279c)
+![PP3](https://github.com/Pravinrajj/rl-policy-evaluation/assets/117917674/d93717d1-f154-4561-bbbb-259a9bcd631c)
 
-The 'Exclusive-NOR' gate circuit does the opposite to the EX-OR gate. It will give a low output if either, but not both of its two inputs are high. The symbol is an EX-OR gate with a small circle on the output. The small circle represents inversion.
-Y= A⊕B
+### COMPARISON
+![C1](https://github.com/Pravinrajj/rl-policy-evaluation/assets/117917674/62f43928-10c2-4e81-8a93-57a06662a299)
 
-**Procedure** 
+### CONCLUSION
+![CC1](https://github.com/Pravinrajj/rl-policy-evaluation/assets/117917674/be819cad-905e-4ecd-b80e-366070380f8b)
 
-1.	Type the program in Quartus software.
-
-2.	Compile and run the program.
-
-3.	Generate the RTL schematic and save the logic diagram.
-
-4.	Create nodes for inputs and outputs to generate the timing diagram.
-
-5.	For different input combinations generate the timing diagram.
-
-
-**PROGRAM**
-
-Program for logic gates and verify its truth table in quartus using Verilog programming
-
- Developed by: RegisterNumber: 
- 
-**Logic symbol & Truthtable**
-
-**RTL realization Output:** 
-
-**RTL**
-
-**Result:**
-
-
+## RESULT:
+Thus, This program will evaluate the given policy in the Bandit Slippery Walk environment and predict the expected reward of the policy.
