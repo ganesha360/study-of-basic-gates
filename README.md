@@ -62,8 +62,21 @@ Y= A⊕B
 
 
 ## PROGRAM
-
-
+## Developed By : GANESH R
+## Reg No : 212222240029
+```python
+module flipflops(a,b,Y1,Y2,Y3,Y4,Y5,Y6,Y7);
+input a,b;
+output Y1,Y2,Y3,Y4,Y5,Y6,Y7;
+and(Y1,a,b);
+or(Y2,a,b);
+not(Y3,a);
+xor(Y4,a,b);
+nand(Y5,a,b);
+nor(Y6,a,b);
+xnor(Y7,a,b);
+endmodule
+```
 
 
 ## Logic symbol & Truthtable
@@ -84,7 +97,7 @@ Y= A⊕B
 ![image](https://github.com/23004513/study-of-basic-gates/assets/138973069/c8aa777f-970e-4d33-b3d1-c042ecca8581)
 
 
-**Result:**
+## Result:
 
 Program for logic gates and verify its truth table in quartus using Verilog programming
 
